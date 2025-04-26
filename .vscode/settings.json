@@ -2,14 +2,14 @@
     "[python]": {
         "diffEditor.ignoreTrimWhitespace": false,
         "editor.defaultColorDecorators": "never",
-        "editor.formatOnType": true,
+        "editor.formatOnType": false,
         "editor.wordBasedSuggestions": "off",
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit",
             "source.fixAll": "explicit",
-            "source.unusedImports": "explicit"
-        },
-    }
+            "source.organizeImports": "explicit"
+        }
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
 }

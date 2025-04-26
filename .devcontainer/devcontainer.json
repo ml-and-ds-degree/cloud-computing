@@ -33,5 +33,14 @@
 	"runArgs": [
 		"--privileged"
 	],
-	"postCreateCommand": "uv sync"
+	"postCreateCommand": "uv sync",
+	// VS Code settings for the dev container
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"charliermarsh.ruff"
+			],
+			"settings": {}
+		}
+	},
 }
