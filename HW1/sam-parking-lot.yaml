@@ -10,23 +10,22 @@ Globals:
         TABLE_NAME: Tickets
 Resources:
   Api:
-    # HTTP API in 3 lines – thanks, SAM
     Type: AWS::Serverless::HttpApi
   TicketsTable:
-    Type: AWS::Serverless::SimpleTable
+    Type: AWS::Serverless::SimpleTable # We will see if this is the right choice
     Properties:
       PrimaryKey:
         Name: ticketId
         Type: String
       TableName: Tickets
-      TimeToLiveSpecification:
-        AttributeName: ttlEpoch
-        Enabled: true
+      # TimeToLiveSpecification:
+      #   AttributeName: ttlEpoch
+      #   Enabled: true
   EntryFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: entry_handler.lambda_handler
-      CodeUri: src/
+      CodeUri: ./src
       Events:
         EntryRoute:
           Type: HttpApi
@@ -39,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: exit_handler.lambda_handler
-      CodeUri: src/
+      CodeUri: ./src
       Events:
         ExitRoute:
           Type: HttpApi
