@@ -1,0 +1,37 @@
+// .devcontainer/devcontainer.json
+{
+	"name": "aws-sam-python-uv",
+	// Python 3.12 image already contains build tools needed by uv & SAM
+	"image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
+	"features": {
+		/* --- Core AWS toolchain ------------------------------------------ */
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"enableNonRootDocker": true
+		},
+		"ghcr.io/devcontainers/features/aws-cli:1": {},
+		"ghcr.io/audacioustux/devcontainers/aws-sam-cli:1": {},
+		/* --- Python package manager -------------------------------------- */
+		"ghcr.io/va-h/devcontainers-features/uv:1": {},
+		/* --- Shell experience -------------------------------------------- */
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installOhMyZsh": true,
+			"configureZshAsDefaultShell": true
+		},
+		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
+			"plugins": "git aws uv ssh-agent",
+			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
+		}
+	},
+	"containerUser": "vscode",
+	"forwardPorts": [
+		3000
+	],
+	"mounts": [
+		"source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
+	],
+	"runArgs": [
+		"--privileged"
+	],
+	"postCreateCommand": "uv sync"
+}
