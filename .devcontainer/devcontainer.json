@@ -1,44 +1,70 @@
-// .devcontainer/devcontainer.json
 {
-	"name": "aws-sam-python-uv",
-	// Python 3.12 image already contains build tools needed by uv & SAM
+	"name": "aws-sam-localstack-uv",
+	//----------------------------------------------------------------------
+	// Base image (Debian bookworm + CPython 3.12 + build essentials + VS Code)
+	//----------------------------------------------------------------------
 	"image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
+	//----------------------------------------------------------------------
+	// Dev-Container Features
+	//----------------------------------------------------------------------
 	"features": {
-		/* --- Core AWS toolchain ------------------------------------------ */
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-			"version": "latest",
-			"enableNonRootDocker": true
-		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		/* --- AWS CLI -------------------------------------- */
 		"ghcr.io/devcontainers/features/aws-cli:1": {},
-		"ghcr.io/audacioustux/devcontainers/aws-sam-cli:1": {},
+		/* --- LocalStack w/ helpers (installs: localstack, awslocal, samlocal,
+			 AWS CLI, SAM CLI, CDK, etc.) --------------------------------- */
+		"ghcr.io/localstack/devcontainer-feature/localstack-cli:latest": {
+			"version": "latest"
+		},
 		/* --- Python package manager -------------------------------------- */
 		"ghcr.io/va-h/devcontainers-features/uv:1": {},
-		/* --- Shell experience -------------------------------------------- */
+		/* --- Shell / Z-sh experience ------------------------------------- */
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"installOhMyZsh": true,
 			"configureZshAsDefaultShell": true
 		},
-		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
-			"plugins": "git aws uv ssh-agent",
-			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
+		"ghcr.io/devcontainers-extra/features/zsh-plugins": {
+			"plugins": "aws uv ssh-agent zsh-autosuggestions zsh-syntax-highlighting zsh-you-should-use",
+			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting https://github.com/MichaelAquilina/zsh-you-should-use"
 		}
 	},
+	//----------------------------------------------------------------------
+	// User & Networking
+	//----------------------------------------------------------------------
 	"containerUser": "vscode",
 	"forwardPorts": [
-		3000
+		3000,
+		4566 // 4566 = LocalStack edge endpoint
 	],
+	"runArgs": [
+		"--privileged" // Required for Docker-in-Docker
+	],
+	//----------------------------------------------------------------------
+	// Volumes & mounts (host AWS creds → container)
+	//----------------------------------------------------------------------
 	"mounts": [
 		"source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
 	],
-	"runArgs": [
-		"--privileged"
-	],
-	"postCreateCommand": "uv sync",
-	// VS Code settings for the dev container
+	//----------------------------------------------------------------------
+	// Post-create bootstrap: install project deps with uv
+	//----------------------------------------------------------------------
+	"postCreateCommand": {
+		"uv-sync": "uv sync",
+		"aws-sam-cli-local": "uv tool install aws-sam-cli-local",
+		"aws-cli-local": "uv tool install awscli-local"
+	},
+	//----------------------------------------------------------------------
+	// VS Code customisations
+	//----------------------------------------------------------------------
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"charliermarsh.ruff"
+				"charliermarsh.ruff",
+				"amazonwebservices.aws-toolkit-vscode",
+				"redhat.vscode-yaml",
+				// Excludes
+				"-ms-python.autopep8",
+				"-dbaeumer.vscode-eslint"
 			],
 			"settings": {}
 		}
