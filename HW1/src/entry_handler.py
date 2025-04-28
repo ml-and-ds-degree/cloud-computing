@@ -5,12 +5,13 @@ import time
 from hashlib import md5
 
 import boto3
+from aws_lambda_typing.events import APIGatewayProxyEventV2
 
 ddb = boto3.resource("dynamodb", endpoint_url=os.getenv("DDB_ENDPOINT"))
 table = ddb.Table(os.getenv("TABLE_NAME"))
 
 
-def lambda_handler(event, _):
+def lambda_handler(event: APIGatewayProxyEventV2, _) -> dict:
     plate = json.loads(event["body"])["plate"]
     ticket_id = md5((plate).encode()).hexdigest()[:8]
     now = int(time.time())
