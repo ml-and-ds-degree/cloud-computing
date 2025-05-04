@@ -16,7 +16,7 @@ def lambda_handler(event: APIGatewayProxyEventV2, _) -> dict:
     ticket_id = md5((plate).encode()).hexdigest()[:8]
     now = int(time.time())
     # Should activate local dynamodb for testing
-    # table.put_item(Item={"ticketId": ticket_id, "plate": plate, "entryEpoch": now, "ttlEpoch": now + 86_400})
+    # table.put_item(Item={"ticketId": ticket_id, "plate": plate, "entryEpoch": now})
     return {
         "statusCode": 201,
         "body": json.dumps({"ticketId": ticket_id}),
