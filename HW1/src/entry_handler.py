@@ -25,8 +25,15 @@ def lambda_handler(event: APIGatewayProxyEventV2, _) -> dict:
     ticket_id = md5((plate).encode()).hexdigest()[:8]
     now = int(time.time())
 
+    if _ := table.get_item(Key={"ticketId": ticket_id}).get("Item"):
+        return {
+            "statusCode": 401,
+            "body": "Error: Car is already in the parking lot",
+        }
+
     table.put_item(Item={"ticketId": ticket_id, "plate": plate, "entryEpoch": now})
+
     return {
         "statusCode": 201,
-        "body": json.dumps({"ticketId": ticket_id}),
+        "body": ticket_id,
     }
