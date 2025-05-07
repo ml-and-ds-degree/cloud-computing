@@ -50,8 +50,12 @@
 	//----------------------------------------------------------------------
 	"postCreateCommand": {
 		"uv-sync": "uv sync",
+		// Tools
 		"aws-sam-cli-local": "uv tool install aws-sam-cli-local",
-		"aws-cli-local": "uv tool install awscli-local"
+		"aws-cli-local": "uv tool install awscli-local",
+		"cfn-lint": "uv tool install cfn-lint",
+		// Environment actions
+		"set-awslocal-completion": "echo 'compdef awslocal=aws' >> ~/.zshrc"
 	},
 	//----------------------------------------------------------------------
 	// VS Code customisations
@@ -61,10 +65,12 @@
 			"extensions": [
 				"charliermarsh.ruff",
 				"amazonwebservices.aws-toolkit-vscode",
-				"redhat.vscode-yaml",
-				// Excludes
+				"kddejong.vscode-cfn-lint",
+				"eamodio.gitlens",
+				// Exclude from container
 				"-ms-python.autopep8",
-				"-dbaeumer.vscode-eslint"
+				"-dbaeumer.vscode-eslint",
+				"-redhat.vscode-yaml"
 			],
 			"settings": {}
 		}
