@@ -8,6 +8,11 @@ Globals:
     Environment:
       Variables:
         TABLE_NAME: Tickets
+        DDB_ENDPOINT:
+          Fn::If: # use IsLocal condition recommended by LocalStack docs
+            - IsLocal # true when sam local/CI wants emulation
+            - "http://host.docker.internal:4566" # macOS/Windows Docker Desktop
+            - !Ref "AWS::NoValue"
 Resources:
   Api:
     Type: AWS::Serverless::HttpApi
