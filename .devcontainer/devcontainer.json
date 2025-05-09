@@ -11,11 +11,6 @@
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
 		/* --- AWS CLI -------------------------------------- */
 		"ghcr.io/devcontainers/features/aws-cli:1": {},
-		/* --- LocalStack w/ helpers (installs: localstack, awslocal, samlocal,
-			 AWS CLI, SAM CLI, CDK, etc.) --------------------------------- */
-		"ghcr.io/localstack/devcontainer-feature/localstack-cli:latest": {
-			"version": "latest"
-		},
 		/* --- Python package manager -------------------------------------- */
 		"ghcr.io/va-h/devcontainers-features/uv:1": {},
 		/* --- Shell / Z-sh experience ------------------------------------- */
@@ -54,6 +49,7 @@
 		"aws-sam-cli-local": "uv tool install aws-sam-cli-local",
 		"aws-cli-local": "uv tool install awscli-local",
 		"cfn-lint": "uv tool install cfn-lint",
+		"localstack": "uv tool install localstack-core && ./setup-localstack.sh",
 		"task": "uv tool install go-task-bin",
 		// Environment actions
 		"set-awslocal-completion": "echo 'compdef awslocal=aws' >> ~/.zshrc",
