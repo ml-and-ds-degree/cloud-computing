@@ -1,5 +1,16 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  EnvironmentName:
+    Description: The environment to deploy to
+    Type: String
+    Default: cloud
+    AllowedValues: ["cloud", "local"]
+
+Conditions:
+  IsLocal: !Equals [!Ref EnvironmentName, "local"]
+
 Globals:
   Function:
     Runtime: python3.12
@@ -8,16 +19,16 @@ Globals:
     Environment:
       Variables:
         TABLE_NAME: Tickets
-        DDB_ENDPOINT:
-          Fn::If: # use IsLocal condition recommended by LocalStack docs
-            - IsLocal # true when sam local/CI wants emulation
-            - "http://host.docker.internal:4566" # macOS/Windows Docker Desktop
-            - !Ref "AWS::NoValue"
+        # !Ref AWS::NoValue doesn't work in SAM CLI - thus, empty string.
+        DDB_ENDPOINT: !If [IsLocal, "http://host.docker.internal:4566", ""]
+
 Resources:
   Api:
     Type: AWS::Serverless::HttpApi
   TicketsTable:
     Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete # In real world, we probably would've used Retain
+    UpdateReplacePolicy: Delete # In real world, we probably would've used Retain
     Properties:
       TableName: Tickets
       AttributeDefinitions:
@@ -29,9 +40,14 @@ Resources:
       BillingMode: PAY_PER_REQUEST
   EntryFn:
     Type: AWS::Serverless::Function
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Handler: entry_handler.lambda_handler
       CodeUri: ./src
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TicketsTable
       Events:
         EntryRoute:
           Type: HttpApi
@@ -42,9 +58,14 @@ Resources:
             Method: POST
   ExitFn:
     Type: AWS::Serverless::Function
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Handler: exit_handler.lambda_handler
       CodeUri: ./src
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TicketsTable
       Events:
         ExitRoute:
           Type: HttpApi
