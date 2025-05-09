@@ -54,8 +54,10 @@
 		"aws-sam-cli-local": "uv tool install aws-sam-cli-local",
 		"aws-cli-local": "uv tool install awscli-local",
 		"cfn-lint": "uv tool install cfn-lint",
+		"task": "uv tool install go-task-bin",
 		// Environment actions
-		"set-awslocal-completion": "echo 'compdef awslocal=aws' >> ~/.zshrc"
+		"set-awslocal-completion": "echo 'compdef awslocal=aws' >> ~/.zshrc",
+		"set-task-completion": "echo 'eval \"$(task --completion zsh)\"' >> ~/.zshrc"
 	},
 	//----------------------------------------------------------------------
 	// VS Code customisations
