@@ -5,7 +5,8 @@ tasks:
     desc: Start LocalStack container
     cmds:
       - HW1/setup-localstack.sh
-  hw1:start-lambda:
+  hw1:start:
     desc: Start the SAM local API server
     cmds:
+      - HW1/create-dynamo-table.sh
       - samlocal local start-api -t HW1/sam-parking-lot.yaml --warm-containers EAGER --parameter-overrides EnvironmentName=local
