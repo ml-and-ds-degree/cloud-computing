@@ -65,6 +65,8 @@
 				"amazonwebservices.aws-toolkit-vscode",
 				"kddejong.vscode-cfn-lint",
 				"eamodio.gitlens",
+				"humao.rest-client",
+				"streetsidesoftware.code-spell-checker",
 				// Exclude from container
 				"-ms-python.autopep8",
 				"-dbaeumer.vscode-eslint",

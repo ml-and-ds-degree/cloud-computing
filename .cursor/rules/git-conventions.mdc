@@ -1,5 +1,5 @@
 ---
-description: 
+description: This rule is good when required for commiting changes to git or naming new branches
 globs: 
 alwaysApply: false
 ---
