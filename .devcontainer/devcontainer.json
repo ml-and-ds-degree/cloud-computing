@@ -3,17 +3,14 @@
 	//----------------------------------------------------------------------
 	// Base image (Debian bookworm + CPython 3.12 + build essentials + VS Code)
 	//----------------------------------------------------------------------
-	"image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
+	"image": "debian:12-slim",
 	//----------------------------------------------------------------------
 	// Dev-Container Features
 	//----------------------------------------------------------------------
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		/* --- AWS CLI -------------------------------------- */
 		"ghcr.io/devcontainers/features/aws-cli:1": {},
-		/* --- Python package manager -------------------------------------- */
 		"ghcr.io/va-h/devcontainers-features/uv:1": {},
-		/* --- Shell / Z-sh experience ------------------------------------- */
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"installOhMyZsh": true,
 			"configureZshAsDefaultShell": true
@@ -44,10 +41,11 @@
 	// Post-create bootstrap: install project deps with uv
 	//----------------------------------------------------------------------
 	"postCreateCommand": {
-		"uv-sync": "uv sync",
+		"uv-sync": "uv sync -p 3.12",
 		// Tools
 		"aws-sam-cli-local": "uv tool install aws-sam-cli-local",
 		"aws-cli-local": "uv tool install awscli-local",
+		"sam-cli": "uv tool install https://github.com/aws/aws-sam-cli.git",
 		"cfn-lint": "uv tool install cfn-lint",
 		"localstack": "uv tool install localstack-core && ./setup-localstack.sh",
 		"task": "uv tool install go-task-bin",
