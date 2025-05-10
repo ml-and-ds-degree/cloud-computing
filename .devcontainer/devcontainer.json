@@ -55,6 +55,7 @@
 		"set-awslocal-completion": "echo 'compdef awslocal=aws' >> ~/.zshrc",
 		"set-task-completion": "echo 'eval \"$(task --completion zsh)\"' >> ~/.zshrc"
 	},
+	"postStartCommand": "localstack completion zsh | install -Dm644 /dev/stdin ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/completions/_localstack",
 	//----------------------------------------------------------------------
 	// VS Code customisations
 	//----------------------------------------------------------------------
