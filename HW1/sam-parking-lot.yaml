@@ -27,8 +27,8 @@ Resources:
     Type: AWS::Serverless::HttpApi
   TicketsTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Delete # In real world, we probably would've used Retain
-    UpdateReplacePolicy: Delete # In real world, we probably would've used Retain
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       TableName: Tickets
       AttributeDefinitions:
@@ -38,39 +38,49 @@ Resources:
         - AttributeName: ticketId
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
+
   EntryFn:
     Type: AWS::Serverless::Function
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       Handler: entry_handler.lambda_handler
       CodeUri: ./src
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref TicketsTable
+        - Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            Resource: !GetAtt TicketsTable.Arn
       Events:
         EntryRoute:
           Type: HttpApi
           Properties:
-            ApiId:
-              Ref: Api
+            ApiId: !Ref Api
             Path: /entry
             Method: POST
+  
   ExitFn:
     Type: AWS::Serverless::Function
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       Handler: exit_handler.lambda_handler
       CodeUri: ./src
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref TicketsTable
+        - Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
+            Resource: !GetAtt TicketsTable.Arn
       Events:
         ExitRoute:
           Type: HttpApi
           Properties:
-            ApiId:
-              Ref: Api
+            ApiId: !Ref Api
             Path: /exit
             Method: POST
