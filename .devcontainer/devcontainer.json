@@ -66,10 +66,10 @@
 				"eamodio.gitlens",
 				"humao.rest-client",
 				"streetsidesoftware.code-spell-checker",
+				"redhat.vscode-yaml",
 				// Exclude from container
 				"-ms-python.autopep8",
-				"-dbaeumer.vscode-eslint",
-				"-redhat.vscode-yaml"
+				"-dbaeumer.vscode-eslint"
 			],
 			"settings": {}
 		}
