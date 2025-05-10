@@ -6,10 +6,15 @@ Parameters:
     Description: The environment to deploy to
     Type: String
     Default: cloud
-    AllowedValues: ["cloud", "local"]
+    AllowedValues:
+      - cloud
+      - local
 
 Conditions:
-  IsLocal: !Equals [!Ref EnvironmentName, "local"]
+  IsLocal:
+    Fn::Equals:
+      - !Ref EnvironmentName
+      - "local"
 
 Globals:
   Function:
@@ -19,13 +24,24 @@ Globals:
     Environment:
       Variables:
         # !Ref AWS::NoValue doesn't work in SAM CLI - thus, empty string.
-        DDB_ENDPOINT: !If [IsLocal, "http://host.docker.internal:4566", ""]
+        DDB_ENDPOINT: !If
+          - IsLocal
+          - http://host.docker.internal:4566
+          - ""
         # For idempotency naming in deployment
-        TABLE_NAME: !If [IsLocal, Tickets, !Ref TicketsTable]
+        TABLE_NAME: !If
+          - IsLocal
+          - Tickets
+          - !Ref TicketsTable
 
 Resources:
   Api:
     Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods:
+          - POST
+
   TicketsTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
@@ -47,12 +63,11 @@ Resources:
       Handler: entry_handler.lambda_handler
       CodeUri: ./src
       Policies:
-        - Version: '2012-10-17'
-          Statement:
+        Statement:
           - Effect: Allow
             Action:
-            - dynamodb:GetItem
-            - dynamodb:PutItem
+              - dynamodb:GetItem
+              - dynamodb:PutItem
             Resource: !GetAtt TicketsTable.Arn
       Events:
         EntryRoute:
@@ -61,7 +76,7 @@ Resources:
             ApiId: !Ref Api
             Path: /entry
             Method: POST
-  
+
   ExitFn:
     Type: AWS::Serverless::Function
     DeletionPolicy: Delete
@@ -70,12 +85,11 @@ Resources:
       Handler: exit_handler.lambda_handler
       CodeUri: ./src
       Policies:
-        - Version: '2012-10-17'
-          Statement:
+        Statement:
           - Effect: Allow
             Action:
-            - dynamodb:GetItem
-            - dynamodb:DeleteItem
+              - dynamodb:GetItem
+              - dynamodb:DeleteItem
             Resource: !GetAtt TicketsTable.Arn
       Events:
         ExitRoute:

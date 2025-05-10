@@ -45,3 +45,10 @@ POST http://localhost:3000/exit HTTP/1.1
 content-type: application/json
 
 {}
+
+###
+
+# Policy checks
+# No a POST request
+GET http://localhost:3000/exit HTTP/1.1
+Authentication: Bearer 123
