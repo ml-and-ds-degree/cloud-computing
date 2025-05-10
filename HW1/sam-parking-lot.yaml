@@ -18,9 +18,10 @@ Globals:
     Timeout: 10
     Environment:
       Variables:
-        TABLE_NAME: Tickets
         # !Ref AWS::NoValue doesn't work in SAM CLI - thus, empty string.
         DDB_ENDPOINT: !If [IsLocal, "http://host.docker.internal:4566", ""]
+        # For idempotency naming in deployment
+        TABLE_NAME: !If [IsLocal, Tickets, !Ref TicketsTable]
 
 Resources:
   Api:
@@ -30,7 +31,6 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: Tickets
       AttributeDefinitions:
         - AttributeName: ticketId
           AttributeType: S
