@@ -67,6 +67,7 @@
 				"humao.rest-client",
 				"streetsidesoftware.code-spell-checker",
 				"redhat.vscode-yaml",
+				"seatonjiang.gitmoji-vscode",
 				// Exclude from container
 				"-ms-python.autopep8",
 				"-dbaeumer.vscode-eslint"
