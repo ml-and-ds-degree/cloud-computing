@@ -60,10 +60,10 @@ To deploy the application to AWS:
 2. Run one of the following commands:
    ```bash
    # Deploy to AWS
-   sam deploy -t HW1/sam-parking-lot.yaml
+   sam deploy -t HW1/parking-lot.template.yaml
 
    # Or deploy to LocalStack for testing
-   samlocal deploy -t HW1/sam-parking-lot.yaml
+   samlocal deploy -t HW1/parking-lot.template.yaml
    ```
 3. Follow the prompts to:
    - Choose a stack name

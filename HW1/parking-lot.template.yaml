@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
+Description: HW1 - Parking Lot
 
 Parameters:
   EnvironmentName:
@@ -21,6 +22,7 @@ Globals:
     Runtime: python3.12
     MemorySize: 128
     Timeout: 10
+    Tracing: Active
     Environment:
       Variables:
         # !Ref AWS::NoValue doesn't work in SAM CLI - thus, empty string.
@@ -41,6 +43,9 @@ Resources:
       CorsConfiguration:
         AllowMethods:
           - POST
+      Auth:
+        EnableIamAuthorizer: true
+        DefaultAuthorizer: AWS_IAM
 
   TicketsTable:
     Type: AWS::DynamoDB::Table
@@ -54,6 +59,8 @@ Resources:
         - AttributeName: ticketId
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
 
   EntryFn:
     Type: AWS::Serverless::Function

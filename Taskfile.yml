@@ -9,4 +9,4 @@ tasks:
     desc: Start the SAM local API server
     cmds:
       - HW1/create-dynamo-table.sh
-      - samlocal local start-api -t HW1/sam-parking-lot.yaml --warm-containers EAGER --parameter-overrides EnvironmentName=local
+      - samlocal local start-api -t HW1/parking-lot.template.yaml --warm-containers EAGER --parameter-overrides EnvironmentName=local
