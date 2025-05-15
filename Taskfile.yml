@@ -1,10 +1,6 @@
-version: '3'
+version: "3"
 
 tasks:
-  hw1:start-localstack:
-    desc: Start LocalStack container
-    cmds:
-      - HW1/setup-localstack.sh
   hw1:start:
     desc: Start the SAM local API server
     cmds:
