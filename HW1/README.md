@@ -7,7 +7,7 @@ This project implements a simple serverless parking lot management system using 
 - **/entry**: Register a car's entry into a parking lot, generating a unique ticket ID.
 - **/exit**: Register a car's exit, calculate the parking duration and charge, and remove the ticket from the system.
 
-The backend is built with Python 3.12 AWS Lambda functions and uses DynamoDB for ticket storage. The infrastructure is defined in `sam-parking-lot.yaml`.
+The backend is built with Python 3.12 AWS Lambda functions and uses DynamoDB for ticket storage. The infrastructure is defined in `parking-lot.template.yaml`.
 
 ## Homework Folder Structure
 
@@ -17,7 +17,7 @@ The backend is built with Python 3.12 AWS Lambda functions and uses DynamoDB for
 │   ├── 📄 entry_handler.py     # Lambda for car entry (creates ticket)
 │   ├── 📄 exit_handler.py      # Lambda for car exit (calculates charge, deletes ticket)
 │   └── 📄 requirements.txt     # Python dependencies for Lambdas
-├── 📄 sam-parking-lot.yaml     # AWS SAM template (defines APIs, Lambdas, DynamoDB)
+├── 📄 parking-lot.template.yaml     # AWS SAM template (defines APIs, Lambdas, DynamoDB)
 ├── 📄 create-dynamo-table.sh   # Script to create DynamoDB table locally (for LocalStack)
 └── 📁 tests
     └── 📄 manual.rest          # Example HTTP requests for manual testing
