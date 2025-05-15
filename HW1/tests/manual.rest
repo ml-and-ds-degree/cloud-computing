@@ -52,3 +52,11 @@ content-type: application/json
 # No a POST request
 GET http://localhost:3000/exit HTTP/1.1
 Authentication: Bearer 123
+
+###
+
+# Missing query params
+POST http://localhost:3000/exit HTTP/1.1
+content-type: application/json
+
+{}

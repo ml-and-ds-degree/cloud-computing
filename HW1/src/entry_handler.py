@@ -18,16 +18,23 @@ def _resp(code: HTTPStatus, body: dict) -> dict:
 
 
 endpoint_url = os.getenv("DDB_ENDPOINT") or None
+table_name = os.getenv("TABLE_NAME")
+
+if not table_name:
+    raise ValueError("TABLE_NAME environment variable must be set")
+
 ddb = boto3.resource("dynamodb", endpoint_url=endpoint_url)
-table = ddb.Table(os.getenv("TABLE_NAME"))
+table = ddb.Table(table_name)
 
 
 def lambda_handler(event: APIGatewayProxyEventV2, _) -> dict:
-    plate = event["queryStringParameters"].get("plate")
-    parking_lot = event["queryStringParameters"].get("parkingLot")
+    qs = event.get("queryStringParameters", {})
+
+    plate = qs.get("plate")
+    parking_lot = qs.get("parkingLot")
 
     if not plate or not parking_lot:
-        return _resp(HTTPStatus.BAD_REQUEST, {"error": "Missing plate or parkingLot parameter"})
+        return _resp(HTTPStatus.BAD_REQUEST, {"error": "Missing plate or parkingLot parameter in query string"})
 
     ticket_id = md5((plate + parking_lot).encode()).hexdigest()[:8]
     now = int(time.time())
