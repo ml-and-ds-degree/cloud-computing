@@ -1,0 +1,62 @@
+# /entry
+# Happy Flow
+POST http://localhost:3000/entry?plate=ABC-123&parkingLot=LotA HTTP/1.1
+content-type: application/json
+
+{}
+
+###
+
+# Missing `plate`
+POST http://localhost:3000/entry?plate=&parkingLot=LotA HTTP/1.1
+content-type: application/json
+
+{}
+
+###
+
+# Missing `parkingLot`
+POST http://localhost:3000/entry?plate=ABC-123&parkingLot= HTTP/1.1
+content-type: application/json
+
+{}
+
+###
+
+# Missing both `plate` and `parkingLot`
+POST http://localhost:3000/entry?plate=&parkingLot= HTTP/1.1
+content-type: application/json
+
+{}
+
+### 
+
+# /exit
+# Happy Flow - plate=ABC-123&parkingLot=LotA
+POST http://localhost:3000/exit?ticketId=dd62a8c7 HTTP/1.1
+content-type: application/json
+
+{}
+
+###
+
+# Missing `ticketId`
+POST http://localhost:3000/exit HTTP/1.1
+content-type: application/json
+
+{}
+
+###
+
+# Policy checks
+# No a POST request
+GET http://localhost:3000/exit HTTP/1.1
+Authentication: Bearer 123
+
+###
+
+# Missing query params
+POST http://localhost:3000/exit HTTP/1.1
+content-type: application/json
+
+{}

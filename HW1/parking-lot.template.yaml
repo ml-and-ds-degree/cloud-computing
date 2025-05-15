@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: HW1 - Parking Lot
+
+Parameters:
+  EnvironmentName:
+    Description: The environment to deploy to
+    Type: String
+    Default: cloud
+    AllowedValues:
+      - cloud
+      - local
+
+Conditions:
+  IsLocal:
+    Fn::Equals:
+      - !Ref EnvironmentName
+      - "local"
+
+Globals:
+  Function:
+    Runtime: python3.12
+    MemorySize: 128
+    Timeout: 10
+    Tracing: Active
+    Environment:
+      Variables:
+        # !Ref AWS::NoValue doesn't work in SAM CLI - thus, empty string.
+        DDB_ENDPOINT: !If
+          - IsLocal
+          - http://host.docker.internal:4566
+          - ""
+        # For idempotency naming in deployment
+        TABLE_NAME: !If
+          - IsLocal
+          - Tickets
+          - !Ref TicketsTable
+
+Resources:
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods:
+          - POST
+      Auth:
+        EnableIamAuthorizer: true
+        DefaultAuthorizer: AWS_IAM
+
+  TicketsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: ticketId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ticketId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  EntryFn:
+    Type: AWS::Serverless::Function
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Handler: entry_handler.lambda_handler
+      CodeUri: ./src
+      Policies:
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+            Resource: !GetAtt TicketsTable.Arn
+      Events:
+        EntryRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /entry
+            Method: POST
+
+  ExitFn:
+    Type: AWS::Serverless::Function
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Handler: exit_handler.lambda_handler
+      CodeUri: ./src
+      Policies:
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:DeleteItem
+            Resource: !GetAtt TicketsTable.Arn
+      Events:
+        ExitRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /exit
+            Method: POST

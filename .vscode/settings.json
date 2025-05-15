@@ -15,32 +15,6 @@
     // cfnLint
     "cfnLint.path": "/home/vscode/.local/bin/cfn-lint",
     "cfnLint.completion": false,
-    //YAML
-    "yaml.schemas": {
-        "https://raw.githubusercontent.com/awslabs/goformation/master/schema/sam.schema.json": [
-            "sam*.yaml",
-            "sam*.yml"
-        ]
-    },
-    "yaml.customTags": [
-        "!Base64 scalar",
-        "!Cidr scalar",
-        "!And sequence",
-        "!Equals sequence",
-        "!If sequence",
-        "!Not sequence",
-        "!Or sequence",
-        "!Condition scalar",
-        "!FindInMap sequence",
-        "!GetAtt scalar",
-        "!GetAtt sequence",
-        "!GetAZs scalar",
-        "!ImportValue scalar",
-        "!Join sequence",
-        "!Select sequence",
-        "!Split sequence",
-        "!Sub scalar",
-        "!Transform mapping",
-        "!Ref scalar",
-    ]
+    // AWS Toolkit
+    "aws.samcli.enableCodeLenses": true,
 }
