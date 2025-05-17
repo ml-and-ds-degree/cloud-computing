@@ -17,10 +17,12 @@ The backend is built with Python 3.12 AWS Lambda functions and uses DynamoDB for
 │   ├── 📄 entry_handler.py     # Lambda for car entry (creates ticket)
 │   ├── 📄 exit_handler.py      # Lambda for car exit (calculates charge, deletes ticket)
 │   └── 📄 requirements.txt     # Python dependencies for Lambdas
-├── 📄 parking-lot.template.yaml     # AWS SAM template (defines APIs, Lambdas, DynamoDB)
+├── 📁 tests
+│   └── 📄 manual.rest          # Example HTTP requests for manual testing
 ├── 📄 create-dynamo-table.sh   # Script to create DynamoDB table locally (for LocalStack)
-└── 📁 tests
-    └── 📄 manual.rest          # Example HTTP requests for manual testing
+├── 📄 parking-lot.template.yaml # AWS SAM template (defines APIs, Lambdas, DynamoDB)
+├── 📄 samconfig.toml           # AWS SAM CLI configuration file for deployment
+└── 📄 README.md                # Project documentation
 ```
 
 ## How to Run Everything
