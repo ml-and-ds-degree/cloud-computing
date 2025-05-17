@@ -1,4 +1,6 @@
-# /entry
+### =========================== ###
+###           /entry            ###
+### =========================== ###
 # Happy Flow
 POST http://localhost:3000/entry?plate=ABC-123&parkingLot=LotA HTTP/1.1
 content-type: application/json
@@ -31,8 +33,15 @@ content-type: application/json
 
 ### 
 
-# /exit
-# Happy Flow - plate=ABC-123&parkingLot=LotA
+### =========================== ###
+###        End of /entry        ###
+### =========================== ###
+
+
+### =========================== ###
+###           /exit             ###
+### =========================== ###
+# Happy Flow - Exit for `plate=ABC-123&parkingLot=LotA`
 POST http://localhost:3000/exit?ticketId=dd62a8c7 HTTP/1.1
 content-type: application/json
 
@@ -46,17 +55,22 @@ content-type: application/json
 
 {}
 
-###
+### 
 
-# Policy checks
-# No a POST request
+### =========================== ###
+###         End of /exit        ###
+### =========================== ###
+
+
+### =========================== ###
+###        Policy Checks        ###
+### =========================== ###
+# Not a POST request
 GET http://localhost:3000/exit HTTP/1.1
 Authentication: Bearer 123
 
 ###
 
-# Missing query params
-POST http://localhost:3000/exit HTTP/1.1
-content-type: application/json
-
-{}
+### =========================== ###
+###     End of Policy Checks    ###
+### =========================== ###
