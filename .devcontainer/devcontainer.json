@@ -34,6 +34,7 @@
 	//----------------------------------------------------------------------
 	// Volumes & mounts (host AWS creds → container)
 	//----------------------------------------------------------------------
+	"initializeCommand": "mkdir -p ${HOME}/.aws",
 	"mounts": [
 		"source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
 	],
